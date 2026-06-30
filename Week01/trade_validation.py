@@ -5,7 +5,7 @@ trades = [
     {"TradeID": "T004", "Product": "Derivative", "Quantity": 10, "Price": 1500, "Country": "Hong Kong"},
 ]
 
-print(len(trades))
+# print(len(trades))
 
 for trade in trades:
     trade["TradeValue"] = trade["Quantity"] * trade["Price"]
@@ -14,11 +14,28 @@ print(trades)
 for trade in trades:
     print(f" Trade {trade['TradeID']} Value = {trade['TradeValue']}")
 
-Sum = 0
-for trade in trades:
-    Sum += trade["TradeValue"]
-print(f"Total Portfolio Value = {Sum}")
+# Sum = 0
+# for trade in trades:
+# #     Sum += trade["TradeValue"]
+# # print(f"Total Portfolio Value = {Sum}")
 
-print([trade["TradeID"] for trade in trades if trade["TradeValue"] == max(trade["TradeValue"] for trade in trades)])
-print([trade["TradeID"] for trade in trades if trade["TradeValue"] == min(trade["TradeValue"] for trade in trades)])
+# print([trade["TradeID"] for trade in trades if trade["TradeValue"] == max(trade["TradeValue"] for trade in trades)])
+# print([trade["TradeID"] for trade in trades if trade["TradeValue"] == min(trade["TradeValue"] for trade in trades)])
 
+highestvalue = max(trade["TradeValue"] for trade in trades)
+
+highest_trades = [
+    trade["TradeID"]
+    for trade in trades
+    if trade["TradeValue"] == highestvalue
+]
+print(highest_trades)
+
+lowestvalue =min(trade["TradeValue"] for trade in trades)
+
+lowestvalue_trades = [
+    trade["TradeID"]
+    for trade in trades
+    if trade["TradeValue"] == lowestvalue
+]
+print(lowestvalue_trades)

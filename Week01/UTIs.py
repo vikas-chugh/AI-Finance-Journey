@@ -17,8 +17,8 @@ utis = [
 # for i in Seen:
 #     if utis.count(i)>1:
 #         print(i)
-# seen = set()
-# duplicates = set()
+seen = set()
+duplicates = set()
 
 for uti in utis:
     if uti in seen:
