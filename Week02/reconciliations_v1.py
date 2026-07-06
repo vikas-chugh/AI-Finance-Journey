@@ -1,3 +1,24 @@
+"""
+Project 1: Trade Reconciliation Engine (Version 1)
+
+Author: Vikas Chugh
+
+Description:
+Compares internal and external trade data to identify:
+- Matched trades
+- Field mismatches
+- Trades missing in either system
+
+This project demonstrates the use of:
+- Functions
+- Lists and dictionaries
+- Nested loops
+- Modular programming
+- Basic reconciliation logic
+"""
+
+
+
 internal_trades = [
     {"TradeID": "T001", "LEI": "LEI001", "UTI": "UTI001", "Amount": 1000},
     {"TradeID": "T002", "LEI": "LEI002", "UTI": "UTI002", "Amount": 2500},
@@ -12,6 +33,10 @@ external_trades = [
     {"TradeID": "T005", "LEI": "LEI005", "UTI": "UTI005", "Amount": 800},
 ]
 
+"""
+    Searches for a trade by TradeID in the given trade list.
+    Returns the matching trade dictionary if found, otherwise returns None.
+    """
 
 def find_trade(trade_id, trade_list): #Finds the trade in the tradelist
     for trade in trade_list:
@@ -19,6 +44,11 @@ def find_trade(trade_id, trade_list): #Finds the trade in the tradelist
             return trade
     
     return None
+
+"""
+    Compares key fields between an internal and external trade.
+    Returns a list of all mismatched fields.
+    """
 
 def compare_trade(internal_trade, external_trade): #compares the attributes in internal and external lists
     mismatches = []
@@ -29,6 +59,16 @@ def compare_trade(internal_trade, external_trade): #compares the attributes in i
     if internal_trade["Amount"] != external_trade["Amount"]:
         mismatches.append("Amount Mismatch")
     return mismatches
+
+"""
+    Generates the reconciliation report by identifying:
+    - Matched trades
+    - Trades with field mismatches (exceptions)
+    - Trades missing in the external system
+    - Trades missing in the internal system
+
+    Returns all four report sections.
+    """
 
 def generate_report():
     exceptions = []
@@ -65,6 +105,11 @@ def generate_report():
         missing_in_external,
         missing_in_internal
     )
+
+
+"""
+    Displays the reconciliation report in a readable format.
+    """
 
 def print_report(matches, exceptions, missing_in_external, missing_in_internal):
     print("="*20)
@@ -116,3 +161,5 @@ if __name__ == "__main__":
         missing_in_external,
         missing_in_internal
     )
+
+    
