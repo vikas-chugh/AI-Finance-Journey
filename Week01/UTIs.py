@@ -1,3 +1,6 @@
+""From the below UTIs list, extract the duplicates""
+
+
 utis = [
     "UTI001",
     "UTI002",
@@ -17,6 +20,8 @@ utis = [
 # for i in Seen:
 #     if utis.count(i)>1:
 #         print(i)
+
+
 seen = set()
 duplicates = set()
 
