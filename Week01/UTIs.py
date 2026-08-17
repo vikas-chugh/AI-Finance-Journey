@@ -1,4 +1,4 @@
-""From the below UTIs list, extract the duplicates""
+"""From the below UTIs list, extract the duplicates"""
 
 
 utis = [
