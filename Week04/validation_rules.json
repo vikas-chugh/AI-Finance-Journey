@@ -1,0 +1,23 @@
+[
+    {
+        "field": "TradeID",
+        "type": "required",
+        "message": "Missing TradeID"
+    },
+    {
+        "field": "LEI",
+        "type": "required",
+        "message": "Missing LEI"
+    },
+    {
+        "field": "UTI",
+        "type": "required",
+        "message": "Missing UTI"
+    },
+    {
+        "field": "Amount",
+        "type": "min",
+        "value": 1,
+        "message": "Invalid Amount"
+    }
+]
