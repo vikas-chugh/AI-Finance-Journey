@@ -1,5 +1,22 @@
+"""
+Project 2: Validation Engine - Version 3
+
+Builds a configurable trade validation workflow using:
+- Trade data loaded from CSV
+- Validation rules loaded from JSON
+- Reusable validator functions
+- Validation of multiple trades
+- Summary statistics
+- Human-readable validation report
+- Export of the report to a text file
+
+The objective is to separate data loading, validation,
+summary generation, and reporting into independent components.
+"""
 
 import csv
+import json
+import os
 
 def load_trades(filename):
     """
@@ -17,17 +34,18 @@ def load_trades(filename):
     
     return trades
 
-
-import json
-
+"""
+Loads trade data from a CSV file and returns
+a list of trade dictionaries.
+"""
 def load_rules(filename):
+    """Loads validation rules from a JSON file."""
     with open(filename) as file:
         rules = json.load(file)
-    
+
     return rules
 
 
-import os
 BASE_DIR = os.path.dirname(__file__)
 
 trade_file = os.path.join(BASE_DIR, "trades.csv")
@@ -39,22 +57,40 @@ rules_file = os.path.join(BASE_DIR, "validation_rules.json")
 RULES = load_rules(rules_file)
 
 
+"""
+Validates whether a required field contains a value.
+Returns the configured error message if validation fails.
+"""
 def validate_required(value, rule):
     if value.strip() == "":
         return rule["message"]
     return None
 
+
+"""
+Validates whether a numeric value meets the minimum
+value defined in the validation rule.
+"""
 def validate_min(value, rule):
     if value < rule["value"]:
         return rule["message"]
     return None
 
+
+"""
+Maps each validation rule type to its corresponding
+validator function.
+"""
 VALIDATORS = {
     "required": validate_required,
     "min": validate_min
 }
 
 
+"""
+Validates every trade in the dataset and returns
+the validation results for each trade.
+"""
 def validate_trade(trade):
     
     errors = []
@@ -77,6 +113,10 @@ def validate_trade(trade):
     return errors
 
 
+"""
+Validates every trade in the dataset and returns
+the validation results for each trade.
+"""
 def validate_all_trades(trades):
 
     results = []
@@ -96,5 +136,68 @@ def validate_all_trades(trades):
 
 results = validate_all_trades(trades)
 
-print(results)
+"""
+Calculates total, passed, and failed trade counts
+from the validation results.
+"""
+
+def generate_summary(results):
+    total = 0
+    passed = 0
+    failed = 0
+
+    for result in results:
+        total += 1
+
+        if not result["Errors"]:
+            passed += 1
+        else:
+            failed += 1
+
+    return total, passed, failed
+
+total, passed, failed = generate_summary(results)
+
+"""
+Creates a human-readable validation report from
+the summary and individual trade results.
+"""
+
+def create_report(total, passed, failed, results):
+    report = ""
+    report += "="*20 +'\n'
+    report += "TRADE VALIDATION REPORT" +'\n'
+    report += "="*20
+    report += "\n"
+    report += f"Total Trades: {total}" + '\n'
+    report += f"Passed Trades: {passed}" + '\n'
+    report += f"Failed Trades: {failed}" + '\n'
+
+    report +="-"*20 +'\n'
+
+    for result in results:
+        report += f'{result["TradeID"]+'\n'}'
+        if result["Errors"]:
+            report +="STATUS: FAILED" +'\n'
+            for error in result["Errors"]:
+                    report+=(f'   - {error}')
+                    report+= '\n'
+        else:
+            report+="STATUS: PASSED" +'\n'
+            report+= '\n'
+
+    return report
+
+"""
+Creates a human-readable validation report from
+the summary and individual trade results.
+"""
+
+report = create_report(total, passed, failed, results)
+
+print(report)
+
+report_file = os.path.join(BASE_DIR, "report.txt")
+with open(report_file, "w") as file:
+    file.write(report)
 
