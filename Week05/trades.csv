@@ -1,0 +1,5 @@
+TradeID,Product,LEI,UTI,Amount
+T001,Equity,,UTI001,100
+T002,Derivative,LEI002,,500
+T003,Equity,LEI003,,200
+T004,Derivative,LEI004,UTI004,300

@@ -1,0 +1,29 @@
+[
+    {
+        "field": "TradeID",
+        "type": "required",
+        "message": "Missing TradeID"
+    },
+   
+    {
+        "field": "Amount",
+        "type": "min",
+        "value": 1,
+        "message": "Invalid Amount"
+    },
+
+  {
+    "type": "conditional_required",
+    "condition_field": "Product",
+    "condition_value": "Derivative",
+    "field": "UTI",
+    "message": "UTI required for Derivative trades"
+},
+{
+    "type": "conditional_required",
+    "condition_field": "Product",
+    "condition_value": "Equity",
+    "field": "LEI",
+    "message": "LEI required for Equity trades"
+}
+]

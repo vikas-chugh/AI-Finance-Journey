@@ -1,0 +1,19 @@
+====================
+TRADE VALIDATION REPORT
+====================
+Total Trades: 4
+Passed Trades: 2
+Failed Trades: 2
+--------------------
+T001
+STATUS: FAILED
+   - LEI required for Equity trades
+T002
+STATUS: FAILED
+   - UTI required for Derivative trades
+T003
+STATUS: PASSED
+
+T004
+STATUS: PASSED
+
