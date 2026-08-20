@@ -59,7 +59,7 @@ def validate_required(trade, rule):
 
 
 """
-Validates whether a numeric value meets the minimum
+Validates whether a numeric value in a trade meets the minimum
 value defined in the validation rule.
 """
 def validate_min(trade, rule):
@@ -68,7 +68,9 @@ def validate_min(trade, rule):
     if value < rule["value"]:
         return rule["message"]
     return None
-
+"""
+Validates whether a trade meets conditional checks in the validation rules.
+"""
 def validate_conditional_required(trade, rule):
         if trade[rule["condition_field"]] == rule["condition_value"]:
             if trade[rule["field"]].strip() == "":
