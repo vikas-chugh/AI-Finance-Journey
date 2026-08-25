@@ -1,0 +1,17 @@
+====================
+TRADE VALIDATION REPORT
+====================
+Total Trades: 3
+Passed Trades: 1
+Failed Trades: 2
+--------------------
+T001
+STATUS: PASSED
+
+T002
+STATUS: FAILED
+   - Missing LEI
+   - Invalid Amount
+T003
+STATUS: FAILED
+   - Missing UTI

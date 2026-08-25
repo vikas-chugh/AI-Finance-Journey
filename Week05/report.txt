@@ -1,19 +1,53 @@
 ====================
 TRADE VALIDATION REPORT
 ====================
-Total Trades: 4
+Total Trades: 7
 Passed Trades: 2
-Failed Trades: 2
+Failed Trades: 5
 --------------------
 T001
 STATUS: FAILED
-   - LEI required for Equity trades
+Error: LEI required for Equity trades
+AI Explanation
+   - The equity trade cannot be processed because the required Legal Entity Identifier (LEI) is missing.
+Recommended Action
+   - Provide a valid LEI for the relevant entity and resubmit the trade.
+
 T002
 STATUS: FAILED
-   - UTI required for Derivative trades
+Error: UTI required for Derivative trades
+AI Explanation
+   - The trade failed validation because a Unique Transaction Identifier (UTI) is required for derivative trades, but none was provided.
+Recommended Action
+   - Add a valid UTI to the derivative trade details and resubmit.
+
 T003
 STATUS: PASSED
 
 T004
 STATUS: PASSED
+
+T005
+STATUS: FAILED
+Error: UTI required for Derivative trades
+AI Explanation
+   - The trade failed validation because a Unique Transaction Identifier (UTI) is required for derivative trades, but none was provided.
+Recommended Action
+   - Add a valid UTI to the derivative trade details and resubmit.
+
+T006
+STATUS: FAILED
+Error: LEI required for Equity trades
+AI Explanation
+   - The equity trade cannot be processed because the required Legal Entity Identifier (LEI) is missing.
+Recommended Action
+   - Provide a valid LEI for the relevant entity and resubmit the trade.
+
+T007
+STATUS: FAILED
+Error: UTI required for Derivative trades
+AI Explanation
+   - The trade failed validation because a Unique Transaction Identifier (UTI) is required for derivative trades, but none was provided.
+Recommended Action
+   - Add a valid UTI to the derivative trade details and resubmit.
 

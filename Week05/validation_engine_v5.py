@@ -1,17 +1,20 @@
 """
-Project 2: Validation Engine - Version 3
+Project 2: Validation Engine - Version 5
+Validation Engine V5 introduces an AI explanation layer on top of the existing deterministic validation system.
 
-Builds a configurable trade validation workflow using:
-- Trade data loaded from CSV
-- Validation rules loaded from JSON
-- Reusable validator functions
-- Validation of multiple trades
-- Summary statistics
-- Human-readable validation report
-- Export of the report to a text file
+V4 remains responsible for:
 
-The objective is to separate data loading, validation,
-summary generation, and reporting into independent components.
+applying validation rules;
+determining PASS/FAIL;
+identifying errors;
+generating summary statistics and the validation report.
+
+V5 adds:
+
+sending failed validation errors to an LLM;
+generating structured explanations;
+recommending remediation actions;
+keeping AI separate from deterministic validation decisions.
 """
 
 import csv
@@ -58,20 +61,31 @@ RULES = load_rules(rules_file)
 Validates whether a required field contains a value.
 Returns the configured error message if validation fails.
 """
-def validate_required(value, rule):
+def validate_required(trade, rule):
+    value = trade[rule["field"]]
     if value.strip() == "":
         return rule["message"]
     return None
 
 
 """
-Validates whether a numeric value meets the minimum
+Validates whether a numeric value in a trade meets the minimum
 value defined in the validation rule.
 """
-def validate_min(value, rule):
+def validate_min(trade, rule):
+    value = trade[rule["field"]]
+
     if value < rule["value"]:
         return rule["message"]
     return None
+"""
+Validates whether a trade meets conditional checks in the validation rules.
+"""
+def validate_conditional_required(trade, rule):
+        if trade[rule["condition_field"]] == rule["condition_value"]:
+            if trade[rule["field"]].strip() == "":
+                return rule["message"]
+        return None
 
 
 """
@@ -80,7 +94,8 @@ validator function.
 """
 VALIDATORS = {
     "required": validate_required,
-    "min": validate_min
+    "min": validate_min,
+    "conditional_required": validate_conditional_required
 }
 
 
@@ -94,15 +109,11 @@ def validate_trade(trade):
 
     for rule in RULES:
 
-        field = rule["field"]
-
-        value = trade[field]
-
         rule_type = rule["type"]
 
         validator = VALIDATORS[rule_type]
 
-        error = validator(value, rule)
+        error = validator(trade, rule)
 
         if error:
             errors.append(error)
@@ -132,6 +143,94 @@ def validate_all_trades(trades):
     return results
 
 results = validate_all_trades(trades)
+
+"""Objective:
+To create a resuable function to Convert an LLM response from unstructured prose into predictable machine-readable data
+
+refer ai_validation_v1.py"""
+
+from openai import OpenAI
+import json
+
+client = OpenAI()
+
+
+def explain_validation_error(trade_id, error):
+
+    response = client.responses.create(
+        model="gpt-5.6-luna",
+
+        instructions="""
+        You are a trade operations assistant.
+
+        Explain the validation failure using only the information provided.
+        Do not invent regulatory or business requirements.
+        Keep the explanation concise and operationally useful.
+        """,
+
+        input=f"""
+        Trade ID: {trade_id}
+
+        Validation Error:
+        {error}
+
+    
+        """,
+
+        text={
+            "format": {
+                "type": "json_schema",
+                "name": "validation_explanation",
+                "strict": True,
+                "schema": {
+                    "type": "object",
+                    "properties": {
+                        "trade_id": {
+                            "type": "string"
+                        },
+                        "explanation": {
+                            "type": "string"
+                        },
+                        "recommended_action": {
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "trade_id",
+                        "explanation",
+                        "recommended_action"
+                    ],
+                    "additionalProperties": False
+                }
+            }
+        }
+    )
+
+    return json.loads(response.output_text)
+
+"""Adds an AI summary for all errors in each trade"""
+
+def generate_ai_explanations(results):
+
+    explanations = []
+
+    for result in results:
+        if result["Errors"]:
+
+            for error in result["Errors"]:
+                explanation = explain_validation_error(
+                    result["TradeID"],
+                    error
+                )
+
+                explanations.append(explanation)
+
+    return explanations
+
+explanations = generate_ai_explanations(results)
+
+print(explanations)
+
 
 """
 Calculates total, passed, and failed trade counts
@@ -192,6 +291,7 @@ Prints the report in the terminal and a text file separately
 report = create_report(total, passed, failed, results)
 
 print(report)
+
 
 report_file = os.path.join(BASE_DIR, "report.txt")
 with open(report_file, "w") as file:

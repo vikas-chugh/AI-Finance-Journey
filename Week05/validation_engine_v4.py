@@ -24,10 +24,7 @@ def load_trades(filename):
     
     return trades
 
-"""
-Loads trade data from a CSV file and returns
-a list of trade dictionaries.
-"""
+
 def load_rules(filename):
     """Loads validation rules from a JSON file."""
     with open(filename) as file:
@@ -187,8 +184,7 @@ def create_report(total, passed, failed, results):
     return report
 
 """
-Creates a human-readable validation report from
-the summary and individual trade results.
+Prints the report in the terminal and a text file separately
 """
 
 report = create_report(total, passed, failed, results)

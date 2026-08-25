@@ -1,0 +1,22 @@
+====================
+TRADE RECONCILIATION REPORT
+====================
+Matched Trades
+--------------------
+T001
+
+Exceptions
+--------------------
+T002
+   - LEI Mismatch
+T003
+   - UTI Mismatch
+   - Amount Mismatch
+
+Missing in Internal
+--------------------
+T005
+
+Missing in External
+--------------------
+T004
