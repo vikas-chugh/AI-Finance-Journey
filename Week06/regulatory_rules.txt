@@ -1,0 +1,19 @@
+DERIVATIVE REPORTING
+
+Derivative trades require a Unique Transaction Identifier (UTI).
+The UTI should uniquely identify the reported transaction.
+
+EQUITY REPORTING
+
+Equity trades require a valid Legal Entity Identifier (LEI).
+The LEI identifies the legal entity participating in the transaction.
+
+TRADE VALIDATION
+
+Trade amounts must be greater than zero.
+Trades with missing mandatory identifiers should fail validation.
+
+COMPLIANCE TRAINING
+
+Employees involved in regulated activities must complete annual compliance training.
+Training completion should be recorded for audit purposes.
